@@ -8,20 +8,21 @@ import Messages exposing (..)
 import Model exposing (..)
 
 
-contactView : Contact -> Html Msg
-contactView model =
+contactView : Contact -> (String, Html Msg)
+contactView contact =
     let
         classes =
             classList
                 [ ( "card", True )
-                , ( "male", model.gender == 0 )
-                , ( "female", model.gender == 1 )
+                , ( "male", contact.gender == 0 )
+                , ( "female", contact.gender == 1 )
                 ]
 
         fullName =
-            model.first_name ++ " " ++ model.last_name
+            contact.first_name ++ " " ++ contact.last_name
     in
-        div
+        ( toString contact.id
+        , div
             [ classes ]
             [ div
                 [ class "inner" ]
@@ -31,7 +32,7 @@ contactView model =
                         [ class "avatar-wrapper" ]
                         [ img
                             [ class "avatar"
-                            , src model.picture
+                            , src contact.picture
                             ]
                             []
                         ]
@@ -47,14 +48,14 @@ contactView model =
                                 [ i
                                     [ class "fa fa-map-marker" ]
                                     []
-                                , text model.location
+                                , text contact.location
                                 ]
                             , li
                                 []
                                 [ i
                                     [ class "fa fa-birthday-cake" ]
                                     []
-                                , text model.birth_date
+                                , text contact.birth_date
                                 ]
                             ]
                         ]
@@ -63,7 +64,7 @@ contactView model =
                     [ class "card-body" ]
                     [ div
                         [ class "headline" ]
-                        [ p [] [ text model.headline ] ]
+                        [ p [] [ text contact.headline ] ]
                     , ul
                         [ class "contact-info" ]
                         [ li
@@ -71,18 +72,19 @@ contactView model =
                             [ i
                                 [ class "fa fa-phone" ]
                                 []
-                            , text model.phone_number
+                            , text contact.phone_number
                             ]
                         , li
                             []
                             [ i
                                 [ class "fa fa-envelope" ]
                                 []
-                            , text model.email
+                            , text contact.email
                             ]
                         ]
                     ]
                 ]
             ]
+        )
 
 

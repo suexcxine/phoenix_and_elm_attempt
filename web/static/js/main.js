@@ -12995,6 +12995,10 @@ var _elm_lang$html$Html_Events$Options = F2(
 		return {stopPropagation: a, preventDefault: b};
 	});
 
+var _elm_lang$html$Html_Keyed$node = _elm_lang$virtual_dom$VirtualDom$keyedNode;
+var _elm_lang$html$Html_Keyed$ol = _elm_lang$html$Html_Keyed$node('ol');
+var _elm_lang$html$Html_Keyed$ul = _elm_lang$html$Html_Keyed$node('ul');
+
 var _elm_lang$http$Native_Http = function() {
 
 
@@ -13362,10 +13366,9 @@ var _user$project$Model$initialContactList = {
 	total_entries: 0,
 	total_pages: 0
 };
-var _user$project$Model$initialModel = {contactList: _user$project$Model$initialContactList, error: _elm_lang$core$Maybe$Nothing, search: ''};
-var _user$project$Model$Model = F3(
-	function (a, b, c) {
-		return {contactList: a, error: b, search: c};
+var _user$project$Model$Model = F2(
+	function (a, b) {
+		return {contactList: a, search: b};
 	});
 var _user$project$Model$ContactList = F4(
 	function (a, b, c, d) {
@@ -13392,6 +13395,15 @@ var _user$project$Model$Contact = function (a) {
 		};
 	};
 };
+var _user$project$Model$Success = function (a) {
+	return {ctor: 'Success', _0: a};
+};
+var _user$project$Model$Failure = function (a) {
+	return {ctor: 'Failure', _0: a};
+};
+var _user$project$Model$Requesting = {ctor: 'Requesting'};
+var _user$project$Model$NotRequested = {ctor: 'NotRequested'};
+var _user$project$Model$initialModel = {contactList: _user$project$Model$NotRequested, search: ''};
 
 var _user$project$Decoders$contactDecoder = A2(
 	_elm_community$json_extra$Json_Decode_Extra_ops['|:'],
@@ -13465,11 +13477,11 @@ var _user$project$Commands$fetch = F2(
 		return A2(_elm_lang$http$Http$send, _user$project$Messages$FetchResult, request);
 	});
 
-var _user$project$Contact_View$contactView = function (model) {
+var _user$project$Contact_View$contactView = function (contact) {
 	var fullName = A2(
 		_elm_lang$core$Basics_ops['++'],
-		model.first_name,
-		A2(_elm_lang$core$Basics_ops['++'], ' ', model.last_name));
+		contact.first_name,
+		A2(_elm_lang$core$Basics_ops['++'], ' ', contact.last_name));
 	var classes = _elm_lang$html$Html_Attributes$classList(
 		{
 			ctor: '::',
@@ -13479,115 +13491,97 @@ var _user$project$Contact_View$contactView = function (model) {
 				_0: {
 					ctor: '_Tuple2',
 					_0: 'male',
-					_1: _elm_lang$core$Native_Utils.eq(model.gender, 0)
+					_1: _elm_lang$core$Native_Utils.eq(contact.gender, 0)
 				},
 				_1: {
 					ctor: '::',
 					_0: {
 						ctor: '_Tuple2',
 						_0: 'female',
-						_1: _elm_lang$core$Native_Utils.eq(model.gender, 1)
+						_1: _elm_lang$core$Native_Utils.eq(contact.gender, 1)
 					},
 					_1: {ctor: '[]'}
 				}
 			}
 		});
-	return A2(
-		_elm_lang$html$Html$div,
-		{
-			ctor: '::',
-			_0: classes,
-			_1: {ctor: '[]'}
-		},
-		{
-			ctor: '::',
-			_0: A2(
-				_elm_lang$html$Html$div,
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$class('inner'),
-					_1: {ctor: '[]'}
-				},
-				{
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$header,
-						{ctor: '[]'},
-						{
-							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$div,
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$class('avatar-wrapper'),
-									_1: {ctor: '[]'}
-								},
-								{
-									ctor: '::',
-									_0: A2(
-										_elm_lang$html$Html$img,
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$class('avatar'),
-											_1: {
-												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$src(model.picture),
-												_1: {ctor: '[]'}
-											}
-										},
-										{ctor: '[]'}),
-									_1: {ctor: '[]'}
-								}),
-							_1: {
+	return {
+		ctor: '_Tuple2',
+		_0: _elm_lang$core$Basics$toString(contact.id),
+		_1: A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: classes,
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('inner'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$header,
+							{ctor: '[]'},
+							{
 								ctor: '::',
 								_0: A2(
 									_elm_lang$html$Html$div,
 									{
 										ctor: '::',
-										_0: _elm_lang$html$Html_Attributes$class('info-wrapper'),
+										_0: _elm_lang$html$Html_Attributes$class('avatar-wrapper'),
 										_1: {ctor: '[]'}
 									},
 									{
 										ctor: '::',
 										_0: A2(
-											_elm_lang$html$Html$h4,
-											{ctor: '[]'},
+											_elm_lang$html$Html$img,
 											{
 												ctor: '::',
-												_0: _elm_lang$html$Html$text(fullName),
-												_1: {ctor: '[]'}
-											}),
-										_1: {
+												_0: _elm_lang$html$Html_Attributes$class('avatar'),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$src(contact.picture),
+													_1: {ctor: '[]'}
+												}
+											},
+											{ctor: '[]'}),
+										_1: {ctor: '[]'}
+									}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$div,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$class('info-wrapper'),
+											_1: {ctor: '[]'}
+										},
+										{
 											ctor: '::',
 											_0: A2(
-												_elm_lang$html$Html$ul,
+												_elm_lang$html$Html$h4,
+												{ctor: '[]'},
 												{
 													ctor: '::',
-													_0: _elm_lang$html$Html_Attributes$class('meta'),
+													_0: _elm_lang$html$Html$text(fullName),
 													_1: {ctor: '[]'}
-												},
-												{
-													ctor: '::',
-													_0: A2(
-														_elm_lang$html$Html$li,
-														{ctor: '[]'},
-														{
-															ctor: '::',
-															_0: A2(
-																_elm_lang$html$Html$i,
-																{
-																	ctor: '::',
-																	_0: _elm_lang$html$Html_Attributes$class('fa fa-map-marker'),
-																	_1: {ctor: '[]'}
-																},
-																{ctor: '[]'}),
-															_1: {
-																ctor: '::',
-																_0: _elm_lang$html$Html$text(model.location),
-																_1: {ctor: '[]'}
-															}
-														}),
-													_1: {
+												}),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$ul,
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$class('meta'),
+														_1: {ctor: '[]'}
+													},
+													{
 														ctor: '::',
 														_0: A2(
 															_elm_lang$html$Html$li,
@@ -13598,86 +13592,86 @@ var _user$project$Contact_View$contactView = function (model) {
 																	_elm_lang$html$Html$i,
 																	{
 																		ctor: '::',
-																		_0: _elm_lang$html$Html_Attributes$class('fa fa-birthday-cake'),
+																		_0: _elm_lang$html$Html_Attributes$class('fa fa-map-marker'),
 																		_1: {ctor: '[]'}
 																	},
 																	{ctor: '[]'}),
 																_1: {
 																	ctor: '::',
-																	_0: _elm_lang$html$Html$text(model.birth_date),
+																	_0: _elm_lang$html$Html$text(contact.location),
 																	_1: {ctor: '[]'}
 																}
 															}),
-														_1: {ctor: '[]'}
-													}
-												}),
-											_1: {ctor: '[]'}
-										}
-									}),
-								_1: {ctor: '[]'}
-							}
-						}),
-					_1: {
-						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$div,
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$class('card-body'),
-								_1: {ctor: '[]'}
-							},
-							{
-								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$div,
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html_Attributes$class('headline'),
-										_1: {ctor: '[]'}
-									},
-									{
-										ctor: '::',
-										_0: A2(
-											_elm_lang$html$Html$p,
-											{ctor: '[]'},
-											{
-												ctor: '::',
-												_0: _elm_lang$html$Html$text(model.headline),
+														_1: {
+															ctor: '::',
+															_0: A2(
+																_elm_lang$html$Html$li,
+																{ctor: '[]'},
+																{
+																	ctor: '::',
+																	_0: A2(
+																		_elm_lang$html$Html$i,
+																		{
+																			ctor: '::',
+																			_0: _elm_lang$html$Html_Attributes$class('fa fa-birthday-cake'),
+																			_1: {ctor: '[]'}
+																		},
+																		{ctor: '[]'}),
+																	_1: {
+																		ctor: '::',
+																		_0: _elm_lang$html$Html$text(contact.birth_date),
+																		_1: {ctor: '[]'}
+																	}
+																}),
+															_1: {ctor: '[]'}
+														}
+													}),
 												_1: {ctor: '[]'}
-											}),
-										_1: {ctor: '[]'}
-									}),
-								_1: {
+											}
+										}),
+									_1: {ctor: '[]'}
+								}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$div,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$class('card-body'),
+									_1: {ctor: '[]'}
+								},
+								{
 									ctor: '::',
 									_0: A2(
-										_elm_lang$html$Html$ul,
+										_elm_lang$html$Html$div,
 										{
 											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$class('contact-info'),
+											_0: _elm_lang$html$Html_Attributes$class('headline'),
 											_1: {ctor: '[]'}
 										},
 										{
 											ctor: '::',
 											_0: A2(
-												_elm_lang$html$Html$li,
+												_elm_lang$html$Html$p,
 												{ctor: '[]'},
 												{
 													ctor: '::',
-													_0: A2(
-														_elm_lang$html$Html$i,
-														{
-															ctor: '::',
-															_0: _elm_lang$html$Html_Attributes$class('fa fa-phone'),
-															_1: {ctor: '[]'}
-														},
-														{ctor: '[]'}),
-													_1: {
-														ctor: '::',
-														_0: _elm_lang$html$Html$text(model.phone_number),
-														_1: {ctor: '[]'}
-													}
+													_0: _elm_lang$html$Html$text(contact.headline),
+													_1: {ctor: '[]'}
 												}),
-											_1: {
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$ul,
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$class('contact-info'),
+												_1: {ctor: '[]'}
+											},
+											{
 												ctor: '::',
 												_0: A2(
 													_elm_lang$html$Html$li,
@@ -13688,51 +13682,58 @@ var _user$project$Contact_View$contactView = function (model) {
 															_elm_lang$html$Html$i,
 															{
 																ctor: '::',
-																_0: _elm_lang$html$Html_Attributes$class('fa fa-envelope'),
+																_0: _elm_lang$html$Html_Attributes$class('fa fa-phone'),
 																_1: {ctor: '[]'}
 															},
 															{ctor: '[]'}),
 														_1: {
 															ctor: '::',
-															_0: _elm_lang$html$Html$text(model.email),
+															_0: _elm_lang$html$Html$text(contact.phone_number),
 															_1: {ctor: '[]'}
 														}
 													}),
-												_1: {ctor: '[]'}
-											}
-										}),
-									_1: {ctor: '[]'}
-								}
-							}),
-						_1: {ctor: '[]'}
-					}
-				}),
-			_1: {ctor: '[]'}
-		});
+												_1: {
+													ctor: '::',
+													_0: A2(
+														_elm_lang$html$Html$li,
+														{ctor: '[]'},
+														{
+															ctor: '::',
+															_0: A2(
+																_elm_lang$html$Html$i,
+																{
+																	ctor: '::',
+																	_0: _elm_lang$html$Html_Attributes$class('fa fa-envelope'),
+																	_1: {ctor: '[]'}
+																},
+																{ctor: '[]'}),
+															_1: {
+																ctor: '::',
+																_0: _elm_lang$html$Html$text(contact.email),
+																_1: {ctor: '[]'}
+															}
+														}),
+													_1: {ctor: '[]'}
+												}
+											}),
+										_1: {ctor: '[]'}
+									}
+								}),
+							_1: {ctor: '[]'}
+						}
+					}),
+				_1: {ctor: '[]'}
+			})
+	};
 };
 
-var _user$project$ContactList_View$contactsList = function (model) {
-	if (_elm_lang$core$Native_Utils.cmp(model.contactList.total_entries, 0) > 0) {
+var _user$project$ContactList_View$warningMessage = F3(
+	function (iconClasses, message, content) {
 		return A2(
 			_elm_lang$html$Html$div,
 			{
 				ctor: '::',
-				_0: _elm_lang$html$Html_Attributes$class('cards-wrapper'),
-				_1: {ctor: '[]'}
-			},
-			A2(_elm_lang$core$List$map, _user$project$Contact_View$contactView, model.contactList.entries));
-	} else {
-		var classes = _elm_lang$html$Html_Attributes$classList(
-			{
-				ctor: '::',
-				_0: {ctor: '_Tuple2', _0: 'warning', _1: true},
-				_1: {ctor: '[]'}
-			});
-		return A2(
-			_elm_lang$html$Html$div,
-			{
-				ctor: '::',
-				_0: classes,
+				_0: _elm_lang$html$Html_Attributes$class('warning'),
 				_1: {ctor: '[]'}
 			},
 			{
@@ -13750,7 +13751,7 @@ var _user$project$ContactList_View$contactsList = function (model) {
 							_elm_lang$html$Html$i,
 							{
 								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$class('fa fa-meh-o fa-stack-2x'),
+								_0: _elm_lang$html$Html_Attributes$class(iconClasses),
 								_1: {ctor: '[]'}
 							},
 							{ctor: '[]'}),
@@ -13763,14 +13764,17 @@ var _user$project$ContactList_View$contactsList = function (model) {
 						{ctor: '[]'},
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html$text('No contacts found...'),
+							_0: _elm_lang$html$Html$text(message),
 							_1: {ctor: '[]'}
 						}),
-					_1: {ctor: '[]'}
+					_1: {
+						ctor: '::',
+						_0: content,
+						_1: {ctor: '[]'}
+					}
 				}
 			});
-	}
-};
+	});
 var _user$project$ContactList_View$paginationLink = F2(
 	function (currentPage, page) {
 		var classes = _elm_lang$html$Html_Attributes$classList(
@@ -13783,51 +13787,82 @@ var _user$project$ContactList_View$paginationLink = F2(
 				},
 				_1: {ctor: '[]'}
 			});
-		return A2(
-			_elm_lang$html$Html$li,
-			{ctor: '[]'},
-			{
-				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$a,
-					{
-						ctor: '::',
-						_0: classes,
-						_1: {
+		return {
+			ctor: '_Tuple2',
+			_0: _elm_lang$core$Basics$toString(page),
+			_1: A2(
+				_elm_lang$html$Html$li,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$a,
+						{
 							ctor: '::',
-							_0: _elm_lang$html$Html_Events$onClick(
-								_user$project$Messages$Paginate(page)),
-							_1: {ctor: '[]'}
-						}
-					},
-					{ctor: '[]'}),
-				_1: {ctor: '[]'}
-			});
+							_0: classes,
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Events$onClick(
+									_user$project$Messages$Paginate(page)),
+								_1: {ctor: '[]'}
+							}
+						},
+						{ctor: '[]'}),
+					_1: {ctor: '[]'}
+				})
+		};
 	});
-var _user$project$ContactList_View$paginationList = F2(
-	function (totalPages, pageNumber) {
-		return A2(
-			_elm_lang$html$Html$ul,
+var _user$project$ContactList_View$paginationList = function (page) {
+	return A2(
+		_elm_lang$html$Html_Keyed$ul,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('pagination'),
+			_1: {ctor: '[]'}
+		},
+		A2(
+			_elm_lang$core$List$map,
+			_user$project$ContactList_View$paginationLink(page.page_number),
+			A2(_elm_lang$core$List$range, 1, page.total_pages)));
+};
+var _user$project$ContactList_View$contactsList = function (model) {
+	var _p0 = model.contactList;
+	if (_p0.ctor === 'Success') {
+		var _p1 = _p0._0;
+		return (_elm_lang$core$Native_Utils.cmp(_p1.total_entries, 0) > 0) ? A3(
+			_elm_lang$html$Html_Keyed$node,
+			'div',
 			{
 				ctor: '::',
-				_0: _elm_lang$html$Html_Attributes$class('pagination'),
+				_0: _elm_lang$html$Html_Attributes$class('cards-wrapper'),
 				_1: {ctor: '[]'}
 			},
-			A2(
-				_elm_lang$core$List$map,
-				_user$project$ContactList_View$paginationLink(pageNumber),
-				A2(_elm_lang$core$List$range, 1, totalPages)));
-	});
-var _user$project$ContactList_View$searchSection = function (model) {
-	var totalEntries = model.contactList.total_entries;
-	var contactWord = _elm_lang$core$Native_Utils.eq(totalEntries, 1) ? 'contact' : 'contacts';
-	var headerText = _elm_lang$core$Native_Utils.eq(totalEntries, 0) ? '' : A2(
-		_elm_lang$core$Basics_ops['++'],
-		_elm_lang$core$Basics$toString(totalEntries),
-		A2(
+			A2(_elm_lang$core$List$map, _user$project$Contact_View$contactView, _p1.entries)) : A3(
+			_user$project$ContactList_View$warningMessage,
+			'fa fa-meh-o fa-stack-2x',
+			'No contacts found...',
+			_elm_lang$html$Html$text(''));
+	} else {
+		return _elm_lang$html$Html$text('');
+	}
+};
+var _user$project$ContactList_View$headerText = function (model) {
+	var _p2 = model.contactList;
+	if (_p2.ctor === 'Success') {
+		var totalEntries = _p2._0.total_entries;
+		var contactWord = _elm_lang$core$Native_Utils.eq(totalEntries, 1) ? 'contact' : 'contacts';
+		return _elm_lang$core$Native_Utils.eq(totalEntries, 0) ? '' : A2(
 			_elm_lang$core$Basics_ops['++'],
-			' ',
-			A2(_elm_lang$core$Basics_ops['++'], contactWord, ' found')));
+			_elm_lang$core$Basics$toString(totalEntries),
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				' ',
+				A2(_elm_lang$core$Basics_ops['++'], contactWord, ' found')));
+	} else {
+		return '';
+	}
+};
+var _user$project$ContactList_View$searchSection = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
 		{
@@ -13851,7 +13886,8 @@ var _user$project$ContactList_View$searchSection = function (model) {
 						{ctor: '[]'},
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html$text(headerText),
+							_0: _elm_lang$html$Html$text(
+								_user$project$ContactList_View$headerText(model)),
 							_1: {ctor: '[]'}
 						}),
 					_1: {ctor: '[]'}
@@ -13904,6 +13940,67 @@ var _user$project$ContactList_View$searchSection = function (model) {
 			}
 		});
 };
+var _user$project$ContactList_View$viewContent = function (model) {
+	var _p3 = model.contactList;
+	switch (_p3.ctor) {
+		case 'NotRequested':
+			return {
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(''),
+				_1: {ctor: '[]'}
+			};
+		case 'Requesting':
+			return {
+				ctor: '::',
+				_0: _user$project$ContactList_View$searchSection(model),
+				_1: {
+					ctor: '::',
+					_0: A3(
+						_user$project$ContactList_View$warningMessage,
+						'fa fa-spin fa-cog fa-2x fa-fw',
+						'Searching for contacts',
+						_elm_lang$html$Html$text('')),
+					_1: {ctor: '[]'}
+				}
+			};
+		case 'Failure':
+			return {
+				ctor: '::',
+				_0: A3(
+					_user$project$ContactList_View$warningMessage,
+					'fa fa-meh-o fa-stack-2x',
+					_p3._0,
+					_elm_lang$html$Html$text('')),
+				_1: {ctor: '[]'}
+			};
+		default:
+			var _p4 = _p3._0;
+			return {
+				ctor: '::',
+				_0: _user$project$ContactList_View$searchSection(model),
+				_1: {
+					ctor: '::',
+					_0: _user$project$ContactList_View$paginationList(_p4),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$div,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: _user$project$ContactList_View$contactsList(model),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: _user$project$ContactList_View$paginationList(_p4),
+							_1: {ctor: '[]'}
+						}
+					}
+				}
+			};
+	}
+};
 var _user$project$ContactList_View$indexView = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
@@ -13912,30 +14009,7 @@ var _user$project$ContactList_View$indexView = function (model) {
 			_0: _elm_lang$html$Html_Attributes$id('home_index'),
 			_1: {ctor: '[]'}
 		},
-		{
-			ctor: '::',
-			_0: _user$project$ContactList_View$searchSection(model),
-			_1: {
-				ctor: '::',
-				_0: A2(_user$project$ContactList_View$paginationList, model.contactList.total_pages, model.contactList.page_number),
-				_1: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$div,
-						{ctor: '[]'},
-						{
-							ctor: '::',
-							_0: _user$project$ContactList_View$contactsList(model),
-							_1: {ctor: '[]'}
-						}),
-					_1: {
-						ctor: '::',
-						_0: A2(_user$project$ContactList_View$paginationList, model.contactList.total_pages, model.contactList.page_number),
-						_1: {ctor: '[]'}
-					}
-				}
-			}
-		});
+		_user$project$ContactList_View$viewContent(model));
 };
 
 var _user$project$Update$update = F2(
@@ -13948,7 +14022,9 @@ var _user$project$Update$update = F2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						_elm_lang$core$Native_Utils.update(
 							model,
-							{contactList: _p0._0._0}),
+							{
+								contactList: _user$project$Model$Success(_p0._0._0)
+							}),
 						{ctor: '[]'});
 				} else {
 					return A2(
@@ -13956,7 +14032,7 @@ var _user$project$Update$update = F2(
 						_elm_lang$core$Native_Utils.update(
 							model,
 							{
-								error: _elm_lang$core$Maybe$Just('Something went wrong...')
+								contactList: _user$project$Model$Failure('Something went wrong...')
 							}),
 						{ctor: '[]'});
 				}
@@ -13979,7 +14055,9 @@ var _user$project$Update$update = F2(
 			default:
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
-					model,
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{contactList: _user$project$Model$Requesting}),
 					{
 						ctor: '::',
 						_0: A2(_user$project$Commands$fetch, 1, model.search),

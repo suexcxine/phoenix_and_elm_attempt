@@ -3,11 +3,13 @@
 module View exposing (..)
 
 import ContactList.View exposing (indexView)
+import Contact.View exposing (showContactView)
+import Common.View exposing (warningMessage, backToHomeLink)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Messages exposing (..)
 import Model exposing (..)
-
+import Routing exposing (Route(..))
 
 view : Model -> Html Msg
 view model =
@@ -15,9 +17,8 @@ view model =
         []
         [ headerView
         , div []
-            [ indexView model ]
+            [ page model ]
         ]
-
 
 headerView : Html Msg
 headerView =
@@ -27,3 +28,23 @@ headerView =
             []
             [ text "Phoenix and Elm: A real use case" ]
         ]
+
+page : Model -> Html Msg
+page model =
+    case model.route of
+        HomeIndexRoute ->
+            indexView model
+
+        ShowContactRoute id ->
+            showContactView model
+
+        NotFoundRoute ->
+            notFoundView
+
+notFoundView : Html Msg
+notFoundView =
+    warningMessage
+        "fa fa-meh-o fa-stack-2x"
+        "Page not found"
+        backToHomeLink
+

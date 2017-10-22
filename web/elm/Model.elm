@@ -2,6 +2,8 @@
 
 module Model exposing (..)
 
+import Routing exposing (Route)
+
 type RemoteData e a
     = NotRequested
     | Requesting
@@ -10,7 +12,9 @@ type RemoteData e a
 
 type alias Model =
     { contactList : RemoteData String ContactList
-    , search: String
+    , contact : RemoteData String Contact
+    , search : String
+    , route : Route
     }
 
 type alias ContactList =
@@ -33,10 +37,12 @@ type alias Contact =
     , picture : String
     }
 
-initialModel : Model
-initialModel =
+initialModel : Route -> Model
+initialModel route =
     { contactList = NotRequested
+    , contact = NotRequested
     , search = ""
+    , route = route
     }
 
 initialContactList : ContactList

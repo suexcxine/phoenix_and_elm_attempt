@@ -36,4 +36,13 @@ defmodule PhoenixAndElm.Contact do
   """
   def genders, do: @genders
 
+  def search(query, "") do
+    query
+  end
+  def search(query, search_query) do
+    search_query = "%" <> search_query <> "%"
+    query |> where([i], like(i.first_name, ^search_query) or like(i.last_name, ^search_query))
+  end
+
+
 end

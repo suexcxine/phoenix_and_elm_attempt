@@ -13453,6 +13453,7 @@ var _user$project$Decoders$contactListDecoder = A2(
 		A2(_elm_lang$core$Json_Decode$field, 'total_entries', _elm_lang$core$Json_Decode$int)),
 	A2(_elm_lang$core$Json_Decode$field, 'total_pages', _elm_lang$core$Json_Decode$int));
 
+var _user$project$Messages$ResetSearch = {ctor: 'ResetSearch'};
 var _user$project$Messages$HandleFormSubmit = {ctor: 'HandleFormSubmit'};
 var _user$project$Messages$HandleSearchInput = function (a) {
 	return {ctor: 'HandleSearchInput', _0: a};
@@ -13775,6 +13776,38 @@ var _user$project$ContactList_View$warningMessage = F3(
 				}
 			});
 	});
+var _user$project$ContactList_View$resetButton = F2(
+	function (model, className) {
+		var hide = _elm_lang$core$Native_Utils.cmp(
+			_elm_lang$core$String$length(model.search),
+			1) < 0;
+		var classes = _elm_lang$html$Html_Attributes$classList(
+			{
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: className, _1: true},
+				_1: {
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 'hidden', _1: hide},
+					_1: {ctor: '[]'}
+				}
+			});
+		return A2(
+			_elm_lang$html$Html$a,
+			{
+				ctor: '::',
+				_0: classes,
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Events$onClick(_user$project$Messages$ResetSearch),
+					_1: {ctor: '[]'}
+				}
+			},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text('Reset search'),
+				_1: {ctor: '[]'}
+			});
+	});
 var _user$project$ContactList_View$paginationLink = F2(
 	function (currentPage, page) {
 		var classes = _elm_lang$html$Html_Attributes$classList(
@@ -13841,7 +13874,7 @@ var _user$project$ContactList_View$contactsList = function (model) {
 			_user$project$ContactList_View$warningMessage,
 			'fa fa-meh-o fa-stack-2x',
 			'No contacts found...',
-			_elm_lang$html$Html$text(''));
+			A2(_user$project$ContactList_View$resetButton, model, 'btn'));
 	} else {
 		return _elm_lang$html$Html$text('');
 	}
@@ -13912,27 +13945,31 @@ var _user$project$ContactList_View$searchSection = function (model) {
 							},
 							{
 								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$input,
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html_Attributes$type_('search'),
-										_1: {
+								_0: A2(_user$project$ContactList_View$resetButton, model, 'reset'),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$input,
+										{
 											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$placeholder('Search contacts...'),
+											_0: _elm_lang$html$Html_Attributes$type_('search'),
 											_1: {
 												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$value(model.search),
+												_0: _elm_lang$html$Html_Attributes$placeholder('Search contacts...'),
 												_1: {
 													ctor: '::',
-													_0: _elm_lang$html$Html_Events$onInput(_user$project$Messages$HandleSearchInput),
-													_1: {ctor: '[]'}
+													_0: _elm_lang$html$Html_Attributes$value(model.search),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$html$Html_Events$onInput(_user$project$Messages$HandleSearchInput),
+														_1: {ctor: '[]'}
+													}
 												}
 											}
-										}
-									},
-									{ctor: '[]'}),
-								_1: {ctor: '[]'}
+										},
+										{ctor: '[]'}),
+									_1: {ctor: '[]'}
+								}
 							}),
 						_1: {ctor: '[]'}
 					}),
@@ -14052,7 +14089,7 @@ var _user$project$Update$update = F2(
 						model,
 						{search: _p0._0}),
 					{ctor: '[]'});
-			default:
+			case 'HandleFormSubmit':
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
@@ -14061,6 +14098,17 @@ var _user$project$Update$update = F2(
 					{
 						ctor: '::',
 						_0: A2(_user$project$Commands$fetch, 1, model.search),
+						_1: {ctor: '[]'}
+					});
+			default:
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{search: ''}),
+					{
+						ctor: '::',
+						_0: A2(_user$project$Commands$fetch, 1, ''),
 						_1: {ctor: '[]'}
 					});
 		}
@@ -14126,7 +14174,7 @@ var _user$project$Main$main = _elm_lang$html$Html$program(
 var Elm = {};
 Elm['Main'] = Elm['Main'] || {};
 if (typeof _user$project$Main$main !== 'undefined') {
-    _user$project$Main$main(Elm['Main'], 'Main', {"types":{"unions":{"Messages.Msg":{"args":[],"tags":{"FetchResult":["Result.Result Http.Error Model.ContactList"],"HandleSearchInput":["String"],"HandleFormSubmit":[],"Paginate":["Int"]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}}},"aliases":{"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Model.ContactList":{"args":[],"type":"{ entries : List Model.Contact , page_number : Int , total_entries : Int , total_pages : Int }"},"Model.Contact":{"args":[],"type":"{ id : Int , first_name : String , last_name : String , gender : Int , birth_date : String , location : String , phone_number : String , email : String , headline : String , picture : String }"}},"message":"Messages.Msg"},"versions":{"elm":"0.18.0"}});
+    _user$project$Main$main(Elm['Main'], 'Main', {"types":{"unions":{"Messages.Msg":{"args":[],"tags":{"FetchResult":["Result.Result Http.Error Model.ContactList"],"HandleSearchInput":["String"],"HandleFormSubmit":[],"ResetSearch":[],"Paginate":["Int"]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}}},"aliases":{"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Model.ContactList":{"args":[],"type":"{ entries : List Model.Contact , page_number : Int , total_entries : Int , total_pages : Int }"},"Model.Contact":{"args":[],"type":"{ id : Int , first_name : String , last_name : String , gender : Int , birth_date : String , location : String , phone_number : String , email : String , headline : String , picture : String }"}},"message":"Messages.Msg"},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])

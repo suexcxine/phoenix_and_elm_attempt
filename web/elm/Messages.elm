@@ -8,3 +8,4 @@ import Model exposing (ContactList)
 
 type Msg
     = FetchResult (Result Http.Error ContactList)
+    | Paginate Int

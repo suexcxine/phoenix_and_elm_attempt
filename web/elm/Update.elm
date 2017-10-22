@@ -3,6 +3,7 @@
 module Update exposing (..)
 
 import Messages exposing (..)
+import Commands exposing ( fetch )
 import Model exposing (..)
 
 
@@ -14,3 +15,7 @@ update msg model =
 
         FetchResult (Err error) ->
             { model | error = Just "Something went wrong..." } ! []
+
+        Paginate pageNumber ->
+            model ! [ fetch pageNumber ]
+

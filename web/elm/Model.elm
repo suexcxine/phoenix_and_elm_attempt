@@ -10,11 +10,15 @@ type RemoteData e a
     | Failure e
     | Success a
 
+type alias Flags =
+    { socketUrl : String }
+
 type alias Model =
     { contactList : RemoteData String ContactList
     , contact : RemoteData String Contact
     , search : String
     , route : Route
+    , flags : Flags
     }
 
 type alias ContactList =
@@ -37,12 +41,13 @@ type alias Contact =
     , picture : String
     }
 
-initialModel : Route -> Model
-initialModel route =
+initialModel : Flags -> Route -> Model
+initialModel flags route =
     { contactList = NotRequested
     , contact = NotRequested
     , search = ""
     , route = route
+    , flags = flags
     }
 
 initialContactList : ContactList

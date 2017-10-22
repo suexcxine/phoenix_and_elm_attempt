@@ -14256,9 +14256,12 @@ var _user$project$Model$initialContactList = {
 	total_entries: 0,
 	total_pages: 0
 };
-var _user$project$Model$Model = F4(
-	function (a, b, c, d) {
-		return {contactList: a, contact: b, search: c, route: d};
+var _user$project$Model$Flags = function (a) {
+	return {socketUrl: a};
+};
+var _user$project$Model$Model = F5(
+	function (a, b, c, d, e) {
+		return {contactList: a, contact: b, search: c, route: d, flags: e};
 	});
 var _user$project$Model$ContactList = F4(
 	function (a, b, c, d) {
@@ -14293,9 +14296,10 @@ var _user$project$Model$Failure = function (a) {
 };
 var _user$project$Model$Requesting = {ctor: 'Requesting'};
 var _user$project$Model$NotRequested = {ctor: 'NotRequested'};
-var _user$project$Model$initialModel = function (route) {
-	return {contactList: _user$project$Model$NotRequested, contact: _user$project$Model$NotRequested, search: '', route: route};
-};
+var _user$project$Model$initialModel = F2(
+	function (flags, route) {
+		return {contactList: _user$project$Model$NotRequested, contact: _user$project$Model$NotRequested, search: '', route: route, flags: flags};
+	});
 
 var _user$project$Decoders$contactDecoder = A2(
 	_elm_community$json_extra$Json_Decode_Extra_ops['|:'],
@@ -15256,20 +15260,28 @@ var _user$project$View$view = function (model) {
 		});
 };
 
-var _user$project$Main$init = function (location) {
-	var currentRoute = _user$project$Routing$parse(location);
-	var model = _user$project$Model$initialModel(currentRoute);
-	return _user$project$Update$urlUpdate(model);
-};
+var _user$project$Main$init = F2(
+	function (flags, location) {
+		var currentRoute = _user$project$Routing$parse(location);
+		var model = A2(_user$project$Model$initialModel, flags, currentRoute);
+		return _user$project$Update$urlUpdate(model);
+	});
 var _user$project$Main$main = A2(
-	_elm_lang$navigation$Navigation$program,
+	_elm_lang$navigation$Navigation$programWithFlags,
 	_user$project$Messages$UrlChange,
 	{
 		init: _user$project$Main$init,
 		view: _user$project$View$view,
 		update: _user$project$Update$update,
 		subscriptions: _elm_lang$core$Basics$always(_elm_lang$core$Platform_Sub$none)
-	})();
+	})(
+	A2(
+		_elm_lang$core$Json_Decode$andThen,
+		function (socketUrl) {
+			return _elm_lang$core$Json_Decode$succeed(
+				{socketUrl: socketUrl});
+		},
+		A2(_elm_lang$core$Json_Decode$field, 'socketUrl', _elm_lang$core$Json_Decode$string)));
 
 var Elm = {};
 Elm['Main'] = Elm['Main'] || {};

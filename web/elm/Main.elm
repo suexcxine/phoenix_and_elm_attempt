@@ -6,25 +6,24 @@ import Messages exposing (Msg(..))
 import Model exposing (..)
 import Navigation
 import Routing exposing (parse)
-import Commands exposing (fetch)
 import Update exposing (..)
 import View exposing (view)
 
-init : Navigation.Location -> ( Model, Cmd Msg )
-init location =
+init : Flags -> Navigation.Location -> ( Model, Cmd Msg )
+init flags location =
     let
         currentRoute =
             parse location
 
         model =
-            initialModel currentRoute
+            initialModel flags currentRoute
     in
         urlUpdate model
 
 
-main : Program Never Model Msg
+main : Program Flags Model Msg
 main =
-    Navigation.program UrlChange
+    Navigation.programWithFlags UrlChange
         { init = init
         , view = view
         , update = update

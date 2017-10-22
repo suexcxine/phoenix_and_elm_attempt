@@ -22,6 +22,7 @@ import "phoenix_html"
 import Elm from './main';
 const elmDiv = document.querySelector('#elm_target');
 if (elmDiv) {
-    Elm.Main.embed(elmDiv);
+    const sockerUrl = window.socketUrl
+    Elm.Main.embed(elmDiv, { socketUrl });
 }
 

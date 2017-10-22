@@ -51,7 +51,12 @@ urlUpdate : Model -> ( Model, Cmd Msg )
 urlUpdate model =
     case model.route of
         HomeIndexRoute ->
-            model ! [ fetch 1 "" ]
+            case model.contactList of
+                NotRequested ->
+                    model ! [ fetch 1 "" ]
+
+                _ ->
+                    model ! []
 
         ShowContactRoute id ->
             { model | contact = Requesting } ! [ fetchContact id ]

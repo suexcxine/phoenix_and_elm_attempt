@@ -15068,14 +15068,22 @@ var _user$project$Update$urlUpdate = function (model) {
 	var _p0 = model.route;
 	switch (_p0.ctor) {
 		case 'HomeIndexRoute':
-			return A2(
-				_elm_lang$core$Platform_Cmd_ops['!'],
-				model,
-				{
-					ctor: '::',
-					_0: A2(_user$project$Commands$fetch, 1, ''),
-					_1: {ctor: '[]'}
-				});
+			var _p1 = model.contactList;
+			if (_p1.ctor === 'NotRequested') {
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					model,
+					{
+						ctor: '::',
+						_0: A2(_user$project$Commands$fetch, 1, ''),
+						_1: {ctor: '[]'}
+					});
+			} else {
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					model,
+					{ctor: '[]'});
+			}
 		case 'ShowContactRoute':
 			return A2(
 				_elm_lang$core$Platform_Cmd_ops['!'],
@@ -15096,16 +15104,16 @@ var _user$project$Update$urlUpdate = function (model) {
 };
 var _user$project$Update$update = F2(
 	function (msg, model) {
-		var _p1 = msg;
-		switch (_p1.ctor) {
+		var _p2 = msg;
+		switch (_p2.ctor) {
 			case 'FetchResult':
-				if (_p1._0.ctor === 'Ok') {
+				if (_p2._0.ctor === 'Ok') {
 					return A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						_elm_lang$core$Native_Utils.update(
 							model,
 							{
-								contactList: _user$project$Model$Success(_p1._0._0)
+								contactList: _user$project$Model$Success(_p2._0._0)
 							}),
 						{ctor: '[]'});
 				} else {
@@ -15119,13 +15127,13 @@ var _user$project$Update$update = F2(
 						{ctor: '[]'});
 				}
 			case 'FetchContactResult':
-				if (_p1._0.ctor === 'Ok') {
+				if (_p2._0.ctor === 'Ok') {
 					return A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						_elm_lang$core$Native_Utils.update(
 							model,
 							{
-								contact: _user$project$Model$Success(_p1._0._0)
+								contact: _user$project$Model$Success(_p2._0._0)
 							}),
 						{ctor: '[]'});
 				} else {
@@ -15144,7 +15152,7 @@ var _user$project$Update$update = F2(
 					model,
 					{
 						ctor: '::',
-						_0: A2(_user$project$Commands$fetch, _p1._0, model.search),
+						_0: A2(_user$project$Commands$fetch, _p2._0, model.search),
 						_1: {ctor: '[]'}
 					});
 			case 'HandleSearchInput':
@@ -15152,7 +15160,7 @@ var _user$project$Update$update = F2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
 						model,
-						{search: _p1._0}),
+						{search: _p2._0}),
 					{ctor: '[]'});
 			case 'HandleFormSubmit':
 				return A2(
@@ -15177,7 +15185,7 @@ var _user$project$Update$update = F2(
 						_1: {ctor: '[]'}
 					});
 			case 'UrlChange':
-				var currentRoute = _user$project$Routing$parse(_p1._0);
+				var currentRoute = _user$project$Routing$parse(_p2._0);
 				return _user$project$Update$urlUpdate(
 					_elm_lang$core$Native_Utils.update(
 						model,
@@ -15189,7 +15197,7 @@ var _user$project$Update$update = F2(
 					{
 						ctor: '::',
 						_0: _elm_lang$navigation$Navigation$newUrl(
-							_user$project$Routing$toPath(_p1._0)),
+							_user$project$Routing$toPath(_p2._0)),
 						_1: {ctor: '[]'}
 					});
 		}

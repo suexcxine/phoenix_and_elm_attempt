@@ -4,4 +4,8 @@ defmodule PhoenixAndElm.ContactView do
   def render("index.json", %{page: page}) do
     page
   end
+  def render("show.json", %{contact: contact}) do
+    contact
+  end
 end
+

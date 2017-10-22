@@ -19,3 +19,6 @@ update msg model =
         Paginate pageNumber ->
             model ! [ fetch pageNumber ]
 
+        HandleSearchInput value ->
+            { model | search = value} ! []
+

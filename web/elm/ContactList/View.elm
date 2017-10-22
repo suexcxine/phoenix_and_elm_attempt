@@ -50,7 +50,7 @@ searchSection model =
             , div
                 [ class "form-wrapper" ]
                 [ Html.form
-                    [ ]
+                    [ onSubmit HandleFormSubmit ]
                     [ input
                         [ type_ "search"
                         , placeholder "Search contacts..."
